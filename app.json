@@ -1,39 +1,43 @@
 {
   "expo": {
-    "name": "PushTest",
-    "slug": "pushtest",
+    "name": "push-test",
+    "slug": "push-test",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
+      "supportsTablet": true,
       "bundleIdentifier": "com.compellingsoftware.privaterp",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification",
-          "fetch"
-        ]
+        "UIBackgroundModes": ["remote-notification", "fetch"]
       }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.compellingsoftware.privaterp"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "iosDisplayInForeground": true
+          "iosDisplayInForeground": true,
+          "enableBackgroundRemoteNotifications": true
         }
-      ],
-            [
-        "expo-build-properties",
-        {
-          "android": {
-            "kotlinVersion": "2.0.21"
-          },
-          "ios": {
-            "deploymentTarget": "16.0"
-          }
-        }
-      ],
-
-    ],
-    "android": {
-      "package": "com.compellingsoftware.privaterp"
-    }
+      ]
+    ]
   }
 }
