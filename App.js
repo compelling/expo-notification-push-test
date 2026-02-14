@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Text, View, Button, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
+import * as TaskManager from 'expo-task-manager';
 
 const isAndroid = Platform.OS === "android";
 
@@ -28,21 +29,28 @@ async function registerForPushNotificationsAsync() {
     });
   }
 
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      handleRegistrationError(
-        "Permission not granted to get push token for push notification!",
-      );
-      return;
-    }
-    return await Notifications.getDevicePushTokenAsync();
- }
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    handleRegistrationError(
+      "Permission not granted to get push token for push notification!",
+    );
+    return;
+  }
+  return await Notifications.getDevicePushTokenAsync();
+}
+
+const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
+
+TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
+  console.log("Received a notification task payload!", data, error);
+});
+
+Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -71,6 +79,7 @@ export default function App() {
     };
   }, []);
 
+  console.log("expoPushToken", expoPushToken);
   return (
     <View
       style={{ flex: 1, alignItems: "center", justifyContent: "space-around" }}
